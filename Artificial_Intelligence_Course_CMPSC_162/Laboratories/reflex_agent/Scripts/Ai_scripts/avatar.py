@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # Current Agent's reflexes
 mood_list = ['Happy', 'Frown', 'Sad', 'Angry', 'Neutral']
@@ -32,10 +33,15 @@ class Avatar:
     # Sets the mood by comparing previous mood
     # Should only be updated if there is a change in mood else the avatar animation will be stuck at frame 0
     def set_mood(self, mood) -> None:
-
         if self.current_mood != mood:
             self.current_mood = mood
             self.animation = self.game.assets['avatar' + '/' + self.current_mood].copy()
+            playing = self.game.sound.check()
+
+            if playing:
+                 self.game.sound.stop(playing[0], playing[1])
+                 
+            self.game.sound.play('avatar' + '/' + self.current_mood, variant=random.randint(0, len(self.game.sound.assets['avatar' + '/' + self.current_mood]) - 1))
 
     # Updates the mood depending on user's action
     # If the user touches the avatar the mood decreases capping at (-1 * mood_interval) or 1 index below interval
