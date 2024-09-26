@@ -5,7 +5,7 @@ from Scripts.Ai_scripts.avatar import Avatar
 from Scripts.Ai_scripts.sfx import SoundMixer
 import sys
 
-# Current Development Time : 3H : 30 M
+# Current Development Time : 4H : 30 M
     
 class Engine:
     
