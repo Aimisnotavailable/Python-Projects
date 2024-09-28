@@ -1,0 +1,1 @@
+MAP_PATH = 'data/maps/'

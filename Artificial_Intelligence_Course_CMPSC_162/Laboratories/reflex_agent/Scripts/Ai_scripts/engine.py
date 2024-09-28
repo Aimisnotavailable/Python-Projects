@@ -30,7 +30,7 @@ class Engine:
                             'avatar/Frown' : Animation(load_images('avatar/Frown', scale=scale), dur=8, loop=True),
                             'avatar/Sad' : Animation(load_images('avatar/Sad', scale=scale), dur=8, loop=True),
                             'avatar/Angry' : Animation(load_images('avatar/Angry', scale=scale), dur=8, loop=True),
-                            'cursor' : Animation(load_images('cursor'), dur=6, loop=True),
+                            'cursor' : Animation(load_images('cursor'), dur=7, loop=True),
                         }
             },
             key='img'
