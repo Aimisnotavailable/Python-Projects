@@ -4,6 +4,7 @@ import random
 from scripts.water import Water
 
 NEIGHBOR_OFFSETS = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (0,0), (-1, 1), (0, 1), (1, 1)]
+RECT_OFFSETS = [(0, 0), (1, 0), (0, 1), (1, 1)]
 
 
 AUTO_TILE_MAP = {
@@ -80,8 +81,6 @@ class TileMap:
 
         return results
             
-
-
     def render(self, surf, offset=(0,0), grid_enabled=False):
         for tile in self.offgrid_tiles:
             img_rect = self.game.assets[tile['type']][tile['variant']].get_rect(centerx=tile['pos'][0] - offset[0], bottom=tile['pos'][1] - offset[1])
@@ -114,14 +113,16 @@ class TileMap:
 
             del self.nearby_water[loc]
             
-    def tiles_around(self, pos, type):   
+    def tiles_around(self, rect, type):   
         physics_tiles = []
-        tile_loc = (int((pos[0])//self.tile_size), int((pos[1])//self.tile_size))
-        for offset in NEIGHBOR_OFFSETS:
-            key = str(tile_loc[0] + offset[0]) + ';' + str(tile_loc[1] + offset[1])
-            if type == 'solid':
-                if key in self.tilemap and self.tilemap[key]['type'] in PHYSICS_TILES:
-                    physics_tiles.append(self.tilemap[key])
+
+        for r_offset in RECT_OFFSETS:
+            tile_loc = (int((rect[0] + rect[2] * r_offset[0])//self.tile_size), int((rect[1]+ rect[3] * r_offset[1] )//self.tile_size))
+            for n_offset in NEIGHBOR_OFFSETS:
+                key = str(tile_loc[0] + n_offset[0]) + ';' + str(tile_loc[1] + n_offset[1])
+                if type == 'solid':
+                    if key in self.tilemap and self.tilemap[key]['type'] in PHYSICS_TILES:
+                        physics_tiles.append(self.tilemap[key])
         return physics_tiles
     
     def solid_check(self, pos):
@@ -131,9 +132,9 @@ class TileMap:
                 return self.tilemap[tile_loc]
             return None
         
-    def tiles_rect_around(self, pos, type='solid'):
+    def tiles_rect_around(self, rect, type='solid'):
         tile_data = {'rects' : [], 'color' : []}
-        for tile in self.tiles_around(pos, type):
+        for tile in self.tiles_around(rect, type):
             tile_data['rects'].append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size))
             tile_data['color'].append(random.choice(COLORS[tile['type']]))
         return tile_data

@@ -8,6 +8,7 @@ from abc import ABC, abstractmethod
 class PhysicsEntities:
     
     def __init__(self, game, e_type, pos=(0,0), size=(16,16)):
+        print(size)
         self.game = game
         self.type = e_type
         self.pos = list(pos)
@@ -17,7 +18,7 @@ class PhysicsEntities:
 
         self.action = ''
         self.last_action = ''
-        self.anim_offset = (-3, -3)
+        self.anim_offset = (0, 0)
         self.flip = False
         self.air_time = 0
 
@@ -34,14 +35,14 @@ class PhysicsEntities:
     def render(self, surf, offset=(0,0)):
         surf.blit(pygame.transform.flip(self.animation.img(), self.flip, False), (self.pos[0] - offset[0] + self.anim_offset[0], self.pos[1] - offset[1] + self.anim_offset[1]))
 
-    def update(self, tilemap, movement=(0,0), offset=(0,0)):
+    def update(self, tilemap, surf, movement=(0,0), offset=(0,0)):
         self.movement = movement
         self.collisions = {'up' : False, 'down' : False, 'right' : False, 'left' : False}
         self.frame_movement = (movement[0] + self.velocity[0], movement[1] + self.velocity[1] )
 
         self.pos[0] += self.frame_movement[0] * self.drag
         entity_rect = self.rect()
-        tile_data = tilemap.tiles_rect_around(self.pos)
+        tile_data = tilemap.tiles_rect_around(self.rect())
 
         for i in range(len(tile_data['rects'])):
             rect = tile_data['rects'][i]
@@ -54,16 +55,18 @@ class PhysicsEntities:
                 if self.frame_movement[0] < 0:
                     entity_rect.left = rect.right
                     self.collisions['left'] = True
+
                 self.pos[0] = entity_rect.x
 
-        self.pos[1] += self.frame_movement[1] * self.drag
+        self.pos[1] += self.frame_movement[1] * self.drag   
         entity_rect = self.rect()
-        tile_data = tilemap.tiles_rect_around(self.pos)
-            
+        tile_data = tilemap.tiles_rect_around(self.rect())
+
         for i in range(len(tile_data['rects'])):
             rect = tile_data['rects'][i]
             color = tile_data['color'][i]
 
+            pygame.draw.rect(surf, (255,255,255), (rect[0] - offset[0], rect[1] - offset[1], rect[2], rect[3]))
             if entity_rect.colliderect(rect):
                 if int(self.drag):
                     spawn_particles = random.random() + int(abs(self.velocity[1]))
@@ -72,6 +75,7 @@ class PhysicsEntities:
 
                 if self.frame_movement[1] > 0:
                     entity_rect.bottom = rect.top
+                    print(entity_rect.bottom)
                     self.collisions['down'] = True
 
                 if self.frame_movement[1] < 0:
@@ -109,6 +113,7 @@ class PhysicsEntities:
             self.flip = True
         
         self.velocity[1] = min(5 * self.drag, self.velocity[1] + 0.1)
+
         if self.collisions['up'] or self.collisions['down']:
             self.velocity[1] = 0
         

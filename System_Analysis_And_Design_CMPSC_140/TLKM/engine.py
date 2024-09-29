@@ -29,10 +29,10 @@ class Engine:
         self.tilemap.load(path.MAP_PATH + 'map.json')
         pos = self.tilemap.extract([('spawner', 1)], keep=False)[0]['pos']
 
-        self.player = Player(self, pos=pos)
+        self.player = Player(self, pos=pos, size=(24, 40))
         self.follow = Follow('follow', 30)
         self.pos = [0, 0]
-        
+
         # scale = (100, 100)
 
         # Fetch assets in data folders
@@ -77,17 +77,18 @@ class Engine:
         self.font = pygame.font.Font(size=20)
     
     def run(self) -> None:
-        
+        movement = [0, 0]
         while True:
             
             self.display.fill((0, 0, 0))  
             mpos = list(pygame.mouse.get_pos())
             mpos = [mpos[0] // 2, mpos[1] // 2]
 
-            render_scroll = self.follow.scroll(self.display, self.player.pos)
+            render_scroll = self.follow.scroll(self.display, self.player.rect().center)
 
             pygame.draw.rect(self.display, (255, 255, 255), (0 - render_scroll[0], 0 - render_scroll[1], 20, 20))
-            movement = [0, 0]
+            
+
             for event in pygame.event.get():
                 
                 if event.type == pygame.QUIT:
@@ -95,18 +96,25 @@ class Engine:
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
-                        movement[0] -= 50
+                        movement[0] = -1
                     if event.key == pygame.K_RIGHT:
-                        movement[0] += 50
+                        movement[0] = 1
                     if event.key == pygame.K_DOWN:
-                        movement[1] += 50
+                        pass
                     if event.key == pygame.K_UP:
-                        movement[1] -= 50
+                        self.player.velocity[1] = -5
 
-            self.player.update(self.tilemap, movement=movement, offset=render_scroll)
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_LEFT:
+                        movement[0] = 0
+                    if event.key == pygame.K_RIGHT:
+                        movement[0] = 0
+
+            self.tilemap.render(self.display, offset=render_scroll)
+            self.player.update(self.tilemap, self.display, movement=movement, offset=render_scroll)
             self.player.render(self.display, render_scroll)
             
-            self.tilemap.render(self.display, offset=render_scroll)
+
         
             self.screen.blit(pygame.transform.scale(self.display, (self.screen.get_width(), self.screen.get_height())), (0, 0))
 
