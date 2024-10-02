@@ -117,7 +117,7 @@ class TileMap:
         physics_tiles = []
 
         for r_offset in RECT_OFFSETS:
-            tile_loc = (int((rect[0] + rect[2] * r_offset[0])//self.tile_size), int((rect[1]+ rect[3] * r_offset[1] )//self.tile_size))
+            tile_loc = (int((rect[0] + rect[2] * r_offset[0] - self.tile_size)//self.tile_size), int((rect[1]+ rect[3] * r_offset[1] - self.tile_size)//self.tile_size))
             for n_offset in NEIGHBOR_OFFSETS:
                 key = str(tile_loc[0] + n_offset[0]) + ';' + str(tile_loc[1] + n_offset[1])
                 if type == 'solid':
