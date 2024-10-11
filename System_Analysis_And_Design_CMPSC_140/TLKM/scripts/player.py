@@ -7,3 +7,12 @@ class Player(NonobjEntities):
         super().__init__(game, 'player', pos=pos, size=size)
 
         self.set_action('idle')
+    
+    def attack(self):
+        pass
+
+    def dash(self):
+        pass
+
+    def element(self):
+        pass
