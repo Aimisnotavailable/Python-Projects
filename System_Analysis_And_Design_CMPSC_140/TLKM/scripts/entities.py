@@ -8,7 +8,6 @@ from abc import ABC, abstractmethod
 class PhysicsEntities:
     
     def __init__(self, game, e_type, pos=(0,0), size=(16,16)):
-        print(size)
         self.game = game
         self.type = e_type
         self.pos = list(pos)
@@ -130,7 +129,7 @@ class NonobjEntities(PhysicsEntities):
     def set_action(self, action):
         if action != self.action:
             self.action = action
-            self.animation = self.game.assets[self.type + '/' + self.action].copy()
+            self.animation = self.game.assets[self.type][self.action]['all'].copy()
 
     # def perform_attack(self, atk_type, current_weapon):
     #     #if(self.air_time < 4):

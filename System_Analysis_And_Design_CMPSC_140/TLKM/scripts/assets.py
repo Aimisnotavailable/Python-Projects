@@ -12,7 +12,12 @@ class Assets:
                                  'spawner' : load_images('spawners'),
                      },
                      'entities' : {
-                                 'player/idle' : Animation(load_images('entities/player/idle'), dur=9),
+                        'player' : {
+                                    'idle' : {
+                                       'all' : Animation(load_images('entities/player/idle'), dur=9),
+                                    },
+                                    
+                                 },
                      },
            },
            'sfx' : {
