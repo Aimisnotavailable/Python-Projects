@@ -21,13 +21,13 @@ class Blocks:
     def rect(self) -> pygame.Rect:
         return pygame.Rect(*self.pos, *self.size)
     
-    def move(self, game, blank_pos=[0, 0], ) -> list:
+    def move(self, game=None, blank_pos=[0, 0], ) -> list:
         for offset in NEIGHBOUR_OFFSETS:
             if self.grid_pos[0] + offset[0] == blank_pos[0] and self.grid_pos[1] + offset[1] == blank_pos[1]:
                 self.grid_pos[0] += offset[0]
                 self.grid_pos[1] += offset[1]
                 game.sound.play('click', loop=0, vol=0.5)
-                game.moves -=1
+                game.moves -=1 
                 return [blank_pos[0] - offset[0], blank_pos[1] - offset[1]]
         return blank_pos
 

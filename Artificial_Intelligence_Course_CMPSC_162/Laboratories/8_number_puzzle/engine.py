@@ -3,6 +3,7 @@ from Scripts.utils import load_image, load_images, load_sound, load_sounds, Anim
 from Scripts.assets import Assets
 from Scripts.blocks import Blocks
 from Scripts.rambler import ramble
+from Scripts.solver import Solver
 from Scripts.sfx import SoundMixer
 import sys
 import random
@@ -76,17 +77,33 @@ class Engine:
         self.end_screen_dur = 0
         self.game_end = False
         self.game_end_color = (255, 0, 0)
-        self.moves = random.randint(50, 100)
+        
         
         self.sound.play('background_music')
+        self.game_num = [[[] for i in range(3)] for j in range(3)]
+        self.goal_num = [[[] for i in range(3)] for j in range(3)]
+        
         for i in range(len(data['nums'])):
-            
+            game_pos = data['game_grid'][i]
+            goal_pos = data['goal_grid'][i]
             if data['nums'][i] != 0:
+                pass
                 color=[random.randint(40, 255) for i in range(3)]            
-                self.game_blocks.append(Blocks(data['nums'][i], font=self.font, grid_pos=data['game_grid'][i], center=self.center, color=color))
-                self.goal_blocks.append(Blocks(data['nums'][i], font=self.goal_font, grid_pos=data['goal_grid'][i], center=(10, 10), color=color, size=(10, 10)))
+                self.game_blocks.append(Blocks(data['nums'][i], font=self.font, grid_pos=game_pos, center=self.center, color=color))
+                self.goal_blocks.append(Blocks(data['nums'][i], font=self.goal_font, grid_pos=goal_pos, center=(10, 10), color=color, size=(10, 10)))
             else:
                 self.blank_pos = data['game_grid'][i]
+            
+            self.game_num[game_pos[0]][game_pos[1]] = str(data['nums'][i])
+            self.goal_num[goal_pos[0]][goal_pos[1]] = str(data['nums'][i])
+        
+        self.solver = Solver(list(self.blank_pos), self.game_num, self.goal_num)
+
+        ans = self.solver.solve()
+        self.moves = len(ans)
+        print(ans)
+        print(self.goal_num)
+
 
     def check(self) -> bool:
         for game, goal in zip(self.game_blocks, self.goal_blocks):
@@ -185,3 +202,5 @@ class Engine:
             # Clock capped at 60 fps            
             pygame.display.update()
             self.clock.tick(60)
+
+Engine().run()
