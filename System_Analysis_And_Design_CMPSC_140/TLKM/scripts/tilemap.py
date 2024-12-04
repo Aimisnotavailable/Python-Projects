@@ -22,7 +22,7 @@ AUTO_TILE_MAP = {
 }
 
 PHYSICS_TILES = {'grass', 'stone', 'sand'}
-AUTO_TILE_TYPES = {'grass', 'stone', 'sand'}
+AUTO_TILE_TYPES = {'grass', 'stone', 'sand', 'test', 'test2'}
 
 COLORS = {
             'grass' : [(94, 193, 0 ),

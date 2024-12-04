@@ -7,6 +7,8 @@ class Assets:
            'img' : {
                      'tiles' :{
                                  'grass' : load_images('tiles/grass'),
+                                 'test'  : load_images('tiles/test'),
+                                 'test2'  : load_images('tiles/test2'),
                      },
                      'spawners' : {
                                  'spawner' : load_images('spawners'),
