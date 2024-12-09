@@ -27,7 +27,9 @@ class Graph:
                         visited.add(edge[0])
                         stack.append([edge[0], weight + edge[2][cond], curr_path + [edge[1]]])
             
-            sorted(stack, key=lambda x: x[2])    
+            sorted(stack, key=lambda x: x[2])   
+        
+        return None
             
             
             
