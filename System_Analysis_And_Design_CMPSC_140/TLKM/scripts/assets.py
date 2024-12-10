@@ -16,7 +16,10 @@ class Assets:
                      'entities' : {
                         'player' : {
                                     'idle' : {
-                                       'all' : Animation(load_images('entities/player/idle'), dur=9),
+                                       'all' : Animation(load_images('entities/player/idle'), dur=1),
+                                    },
+                                    'run' : {
+                                       'all' : Animation(load_images('entities/player/run'), dur=2),
                                     },
                                     
                                  },

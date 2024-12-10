@@ -31,7 +31,11 @@ class PhysicsEntities:
     def rect(self):
         return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
     
+    def mask(self):
+        return pygame.mask.from_surface(self.animation.img())
+    
     def render(self, surf, offset=(0,0)):
+        #surf.blit(pygame.transform.flip(self.mask().to_surface(setcolor=(0, 255, 255), unsetcolor=(0, 0, 0)), self.flip, False), (self.pos[0] - offset[0] + self.anim_offset[0], self.pos[1] - offset[1] + self.anim_offset[1]))
         surf.blit(pygame.transform.flip(self.animation.img(), self.flip, False), (self.pos[0] - offset[0] + self.anim_offset[0], self.pos[1] - offset[1] + self.anim_offset[1]))
 
     def update(self, tilemap, surf, movement=(0,0), offset=(0,0)):
@@ -65,7 +69,7 @@ class PhysicsEntities:
             rect = tile_data['rects'][i]
             color = tile_data['color'][i]
 
-            pygame.draw.rect(surf, (255,255,255), (rect[0] - offset[0], rect[1] - offset[1], rect[2], rect[3]))
+            #pygame.draw.rect(surf, (255,255,255), (self.pos[0] - offset[0], self.pos[1] - offset[1], self.size[0], self.size[1]))
             if entity_rect.colliderect(rect):
                 if int(self.drag):
                     spawn_particles = random.random() + int(abs(self.velocity[1]))
@@ -74,7 +78,6 @@ class PhysicsEntities:
 
                 if self.frame_movement[1] > 0:
                     entity_rect.bottom = rect.top
-                    print(entity_rect.bottom)
                     self.collisions['down'] = True
 
                 if self.frame_movement[1] < 0:
@@ -83,19 +86,19 @@ class PhysicsEntities:
 
                 self.pos[1] = entity_rect.y
 
-                if self.type == 'player' or self.type == 'enemy':
-                    if spawn_particles > 0.6 and (self.collisions['down'] or self.collisions['up']):
-                        if self.action != 'idle':
-                            x = self.pos[0]
-                            if self.collisions['down']:
-                                y = rect.top
-                                angle = ((random.random() * math.pi) + math.pi)
-                            elif self.collisions['up']:
-                                y = rect.bottom
-                                angle = ((random.random()) * math.pi)
+                # if self.type == 'player' or self.type == 'enemy':
+                #     if spawn_particles > 0.6 and (self.collisions['down'] or self.collisions['up']):
+                #         if self.action != 'idle':
+                #             x = self.pos[0]
+                #             if self.collisions['down']:
+                #                 y = rect.top
+                #                 angle = ((random.random() * math.pi) + math.pi)
+                #             elif self.collisions['up']:
+                #                 y = rect.bottom
+                #                 angle = ((random.random()) * math.pi)
 
-                            speed = random.random() * random.random()
-                            self.game.particles.append(Particles(self.game, 'dust', angle, speed, (x, y), color_key=color))
+                #             speed = random.random() * random.random()
+                #             self.game.particles.append(Particles(self.game, 'dust', angle, speed, (x, y), color_key=color))
                     
         water_loc_int = [int((self.pos[0] //tilemap.tile_size)), int((self.pos[1]//tilemap.tile_size))]
         water_loc = str(water_loc_int[0]) + ";" + str(water_loc_int[1])
@@ -115,11 +118,16 @@ class PhysicsEntities:
 
         if self.collisions['up'] or self.collisions['down']:
             self.velocity[1] = 0
-        
+
+        if self.running > 0:
+            self.velocity[0] = min(5, self.velocity[0] + 1)
+        elif self.running < 0:
+            self.velocity[0] = max(-5, self.velocity[0] - 1)
+
         if self.velocity[0] > 0:
-            self.velocity[0] = max(self.velocity[0] - 0.1, 0)
+            self.velocity[0] = max(self.velocity[0] - 0.4, 0)
         elif self.velocity[0] < 0:
-            self.velocity[0] = min(self.velocity[0] + 0.1, 0)
+            self.velocity[0] = min(self.velocity[0] + 0.4, 0)
         self.animation.update()
 
         self.track = max(0, self.track - 1)
