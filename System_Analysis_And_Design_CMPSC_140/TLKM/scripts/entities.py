@@ -28,11 +28,18 @@ class PhysicsEntities:
         self.drag = 1
         self.track = 0
 
+    def mask(self):
+        return pygame.mask.from_surface(self.animation.img()).to_surface(setcolor=(255 ,255 ,255), unsetcolor=(0, 0, 0, 0))
+    
+    def sprite(self):
+        return pygame.sprite.Group()
+    
     def rect(self):
         return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
     
     def render(self, surf, offset=(0,0)):
-        surf.blit(pygame.transform.flip(self.animation.img(), self.flip, False), (self.pos[0] - offset[0] + self.anim_offset[0], self.pos[1] - offset[1] + self.anim_offset[1]))
+        pygame.draw.rect(surf, (255, 255, 255), (self.rect()[0] - offset[0], self.rect()[1] - offset[1], self.rect()[2], self.rect()[3]))
+        #surf.blit(pygame.transform.flip(self.mask(), self.flip, False), (self.pos[0] - offset[0] + self.anim_offset[0], self.pos[1] - offset[1] + self.anim_offset[1]))
 
     def update(self, tilemap, surf, movement=(0,0), offset=(0,0)):
         self.movement = movement
@@ -59,8 +66,8 @@ class PhysicsEntities:
 
         self.pos[1] += self.frame_movement[1] * self.drag   
         entity_rect = self.rect()
+        
         tile_data = tilemap.tiles_rect_around(self.rect())
-
         for i in range(len(tile_data['rects'])):
             rect = tile_data['rects'][i]
             color = tile_data['color'][i]
@@ -74,7 +81,7 @@ class PhysicsEntities:
 
                 if self.frame_movement[1] > 0:
                     entity_rect.bottom = rect.top
-                    print(entity_rect.bottom)
+                    #print(entity_rect.bottom)
                     self.collisions['down'] = True
 
                 if self.frame_movement[1] < 0:

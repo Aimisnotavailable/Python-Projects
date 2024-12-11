@@ -29,7 +29,7 @@ class Engine:
         self.tilemap.load(path.MAP_PATH + 'map.json')
         pos = self.tilemap.extract([('spawner', 1)], keep=False)[0]['pos']
 
-        self.player = Player(self, pos=pos, size=(48, 60))
+        self.player = Player(self, pos=pos, size=(112, 70))
         self.follow = Follow('follow', 30)
         self.pos = [0, 0]
 
