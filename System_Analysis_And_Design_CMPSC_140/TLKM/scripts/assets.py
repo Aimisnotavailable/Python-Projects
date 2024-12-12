@@ -21,9 +21,17 @@ class Assets:
                                     'run' : {
                                        'all' : Animation(load_images('entities/player/run'), dur=2),
                                     },
+                                    'attack':{
+                                       'all' : Animation(load_images('entities/player/attack'), dur=1, loop=False)
+                                    }
                                     
                                  },
                      },
+                     'backgrounds' : {
+                        'background' : {
+                                        'all' : load_images('background')
+                        }
+                     }
            },
            'sfx' : {
               

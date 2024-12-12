@@ -17,7 +17,7 @@ class PhysicsEntities:
 
         self.action = ''
         self.last_action = ''
-        self.anim_offset = (0, 0)
+        self.anim_offset = [0, 0]
         self.flip = False
         self.air_time = 0
 
@@ -35,8 +35,11 @@ class PhysicsEntities:
         return pygame.mask.from_surface(self.animation.img())
     
     def render(self, surf, offset=(0,0)):
+        img = pygame.transform.flip(self.animation.img(), self.flip, False)
+        self.anim_offset = [(img.get_width() - self.size[0]) * 1 if self.flip else 1, img.get_height() - self.size[1] ]
+        #print(self.anim_offset)
         #surf.blit(pygame.transform.flip(self.mask().to_surface(setcolor=(0, 255, 255), unsetcolor=(0, 0, 0)), self.flip, False), (self.pos[0] - offset[0] + self.anim_offset[0], self.pos[1] - offset[1] + self.anim_offset[1]))
-        surf.blit(pygame.transform.flip(self.animation.img(), self.flip, False), (self.pos[0] - offset[0] + self.anim_offset[0], self.pos[1] - offset[1] + self.anim_offset[1]))
+        surf.blit(img, (self.pos[0] - offset[0] - self.anim_offset[0], self.pos[1] - offset[1] - self.anim_offset[1]))
 
     def update(self, tilemap, surf, movement=(0,0), offset=(0,0)):
         self.movement = movement

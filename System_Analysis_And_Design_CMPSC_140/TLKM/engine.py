@@ -23,8 +23,9 @@ class Engine:
 
         self.assets = Assets().fetch(payload={'img' : {'all'}})
 
+        # print(self.assets)
         
-        
+        self.background = self.assets['background']['all']
         self.tilemap = TileMap(self)
         self.tilemap.load(path.MAP_PATH + 'map.json')
         pos = self.tilemap.extract([('spawner', 1)], keep=False)[0]['pos']
@@ -86,7 +87,12 @@ class Engine:
             render_scroll = self.follow.scroll(self.display, self.player.rect().center)
 
             pygame.draw.rect(self.display, (255, 255, 255), (0 - render_scroll[0], 0 - render_scroll[1], 20, 20))
-            
+
+            pos = [0, 0]
+            # for background in self.background:
+            #     self.display.blit(background, (pos[0], pos[1] - render_scroll[1]))
+            #     pos = [0, -200]
+            #self.display.blit(self.a) 
             for event in pygame.event.get():
                 
                 if event.type == pygame.QUIT:
@@ -109,6 +115,11 @@ class Engine:
                         self.player.running = 0
                     if event.key == pygame.K_RIGHT:
                         self.player.running = 0
+                
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.player.set_action('attack')
+                        self.player.attacking = True
 
             self.tilemap.render(self.display, offset=render_scroll)
             self.player.update(self.tilemap, self.display, movement=movement, offset=render_scroll)
