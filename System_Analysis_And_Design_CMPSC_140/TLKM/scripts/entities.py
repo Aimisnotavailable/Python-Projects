@@ -28,6 +28,12 @@ class PhysicsEntities:
         self.drag = 1
         self.track = 0
 
+    def mask(self):
+        return pygame.mask.from_surface(self.animation.img()).to_surface(setcolor=(255 ,255 ,255), unsetcolor=(0, 0, 0, 0))
+    
+    def sprite(self):
+        return pygame.sprite.Group()
+    
     def rect(self):
         return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
     
@@ -66,8 +72,8 @@ class PhysicsEntities:
 
         self.pos[1] += self.frame_movement[1] * self.drag   
         entity_rect = self.rect()
+        
         tile_data = tilemap.tiles_rect_around(self.rect())
-
         for i in range(len(tile_data['rects'])):
             rect = tile_data['rects'][i]
             color = tile_data['color'][i]
