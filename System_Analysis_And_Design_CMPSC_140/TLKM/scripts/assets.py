@@ -26,6 +26,11 @@ class Assets:
                                     }
                                     
                                  },
+                        'enemy' : {
+                                    'idle' : {
+                                       'all' : Animation(load_images('entities/enemy/idle', scale=[1.4, 1.4]), dur=1),
+                                    }
+                        }
                      },
                      'backgrounds' : {
                         'background' : {

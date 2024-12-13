@@ -1,5 +1,6 @@
 import pygame
 from scripts.player import Player
+from scripts.enemies import Enemy
 from scripts.tilemap import TileMap
 from scripts.camera import Follow
 import path
@@ -30,6 +31,9 @@ class Engine:
         self.tilemap.load(path.MAP_PATH + 'map.json')
         pos = self.tilemap.extract([('spawner', 1)], keep=False)[0]['pos']
 
+        t_pos = self.tilemap.extract([('spawner', 0)], keep=False)[0]['pos']
+        
+        self.enemy = Enemy(self, pos=t_pos, size=(110, 54))
         self.player = Player(self, pos=pos, size=(64, 89))
         self.follow = Follow('follow', 20)
         self.pos = [0, 0]
@@ -84,7 +88,7 @@ class Engine:
             mpos = list(pygame.mouse.get_pos())
             mpos = [mpos[0] // 2, mpos[1] // 2]
 
-            render_scroll = self.follow.scroll(self.display, self.player.rect().center)
+            render_scroll = self.follow.scroll(self.display, self.player.rect().center, offset=(50, 0))
 
             pygame.draw.rect(self.display, (255, 255, 255), (0 - render_scroll[0], 0 - render_scroll[1], 20, 20))
 
@@ -125,6 +129,8 @@ class Engine:
             self.player.update(self.tilemap, self.display, movement=movement, offset=render_scroll)
             self.player.render(self.display, render_scroll)
             
+            self.enemy.update(self.tilemap, self.display, offset=render_scroll)
+            self.enemy.render(self.display, render_scroll)
 
         
             self.screen.blit(pygame.transform.scale(self.display, (self.screen.get_width(), self.screen.get_height())), (0, 0))

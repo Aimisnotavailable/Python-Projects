@@ -12,7 +12,7 @@ def load_image(path, scale=[]):
     img.set_colorkey((0, 0, 0))
 
     if scale:
-        img = pygame.transform.scale(img, scale)
+        img = pygame.transform.scale(img, (img.get_width() * scale[0], img.get_height() * scale[1]))
 
     return img
 

@@ -14,12 +14,12 @@ class Follow(Scroll):
     def __init__(self, s_type='', depth=1) -> None:
         super().__init__(s_type=s_type, depth=depth)
 
-    def scroll(self, surf, pos=(0, 0)) -> None:
+    def scroll(self, surf, pos=(0, 0), offset=(0, 0)) -> None:
         render_scroll = [0, 0]
         pos = list(pos)
 
-        self.render_scroll[0] += ((pos[0] - surf.get_width()/ 2) - self.render_scroll[0]) // self.depth
-        self.render_scroll[1] += ((pos[1] - surf.get_height()/ 2) - self.render_scroll[1]) // self.depth
+        self.render_scroll[0] += ((pos[0] - offset[0] - surf.get_width()/ 2) - self.render_scroll[0]) // self.depth
+        self.render_scroll[1] += ((pos[1] - offset[1] - surf.get_height()/ 2) - self.render_scroll[1]) // self.depth
         
         render_scroll = [int(self.render_scroll[0]), int(self.render_scroll[1])]
 
