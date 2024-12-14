@@ -14,17 +14,19 @@ class Player(NonobjEntities):
     #     pass
     def update(self, tilemap, surf, movement=(0,0), offset=(0,0)):
         super().update(tilemap, surf, movement, offset)
-
+        
         if self.action == 'attack' and self.animation.done:
             self.attacking = False
+            self.combo = 0
+
         if not self.attacking:
             if self.velocity[0] == 0:
                 self.set_action('idle')
             elif self.running:
                 self.set_action('run')
 
-    def attack(self):
-        pass
+    # def attack(self):
+    #     pass
 
     def dash(self):
         pass

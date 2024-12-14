@@ -27,6 +27,9 @@ class PhysicsEntities:
         self.attacking = 0
         self.drag = 1
         self.track = 0
+        self.combo = 0
+
+        self.atk_type = ''
 
     def mask(self):
         return pygame.mask.from_surface(self.animation.img()).to_surface(setcolor=(255 ,255 ,255), unsetcolor=(0, 0, 0, 0))
@@ -146,7 +149,17 @@ class NonobjEntities(PhysicsEntities):
     def set_action(self, action):
         if action != self.action:
             self.action = action
-            self.animation = self.game.assets[self.type][self.action]['all'].copy()
+            if action != 'attack':
+                self.animation = self.game.assets[self.type][self.action]['all'].copy()
+
+    def attack(self, atk_type, combo):
+        if atk_type != self.atk_type:
+            self.atk_type = atk_type
+            combo = 0
+
+        anim = self.game.assets[self.type][self.action][atk_type]
+        if combo < len(anim):
+            self.animation = anim[combo].copy()
 
     # def perform_attack(self, atk_type, current_weapon):
     #     #if(self.air_time < 4):

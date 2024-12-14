@@ -78,7 +78,7 @@ class Engine:
         #pygame.mouse.set_visible(False)
         pygame.init()
 
-
+        self.combo = False
         self.font = pygame.font.Font(size=20)
     
     def run(self) -> None:
@@ -93,10 +93,12 @@ class Engine:
             pygame.draw.rect(self.display, (255, 255, 255), (0 - render_scroll[0], 0 - render_scroll[1], 20, 20))
 
             pos = [0, 0]
-            # for background in self.background:
-            #     self.display.blit(background, (pos[0], pos[1] - render_scroll[1]))
-            #     pos = [0, -200]
+            for background in self.background:
+                self.display.blit(background, (pos[0], pos[1] - render_scroll[1]))
+                pos = [0, -200]
             #self.display.blit(self.a) 
+
+            
             for event in pygame.event.get():
                 
                 if event.type == pygame.QUIT:
@@ -122,8 +124,18 @@ class Engine:
                 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        self.player.set_action('attack')
-                        self.player.attacking = True
+                        if not self.player.attacking:
+                            self.player.set_action('attack')
+                            self.player.attack('normal_attack', self.player.combo)
+                            self.player.attacking = True
+                        elif not self.combo:
+                            self.player.combo += 1
+                            self.combo = True
+
+            if self.combo and self.player.animation.is_last_frame():
+                self.player.set_action('attack')
+                self.player.attack('normal_attack', self.player.combo)
+                self.combo = False
 
             self.tilemap.render(self.display, offset=render_scroll)
             self.player.update(self.tilemap, self.display, movement=movement, offset=render_scroll)

@@ -16,19 +16,20 @@ class Assets:
                      'entities' : {
                         'player' : {
                                     'idle' : {
-                                       'all' : Animation(load_images('entities/player/idle'), dur=1),
+                                       'all' : Animation(load_images('entities/player/idle', colorkey=(255, 0, 0)), dur=1.2),
                                     },
                                     'run' : {
-                                       'all' : Animation(load_images('entities/player/run'), dur=2),
+                                       'all' : Animation(load_images('entities/player/run', colorkey=(255, 0, 0)), dur=2),
                                     },
                                     'attack':{
-                                       'all' : Animation(load_images('entities/player/attack'), dur=1, loop=False)
+                                       'normal_attack' : [Animation(load_images('entities/player/attack/normal_attack/combo1', colorkey=(255, 0, 0)), dur=2, loop=False), 
+                                                          Animation(load_images('entities/player/attack/normal_attack/combo2', colorkey=(255, 0, 0)), dur=2, loop=False),
+                                                          Animation(load_images('entities/player/attack/normal_attack/combo3', colorkey=(255, 0, 0)), dur=2, loop=False)]
                                     }
-                                    
                                  },
                         'enemy' : {
                                     'idle' : {
-                                       'all' : Animation(load_images('entities/enemy/idle', scale=[1.4, 1.4]), dur=1),
+                                       'all' : Animation(load_images('entities/enemy/idle', scale=[1.4, 1.4], colorkey=(255, 0, 0)), dur=2),
                                     }
                         }
                      },
@@ -67,3 +68,4 @@ class Assets:
               for obj_type in payload[file_type]:
                 assets.update(self.assets[file_type][obj_type])
           return assets 
+        

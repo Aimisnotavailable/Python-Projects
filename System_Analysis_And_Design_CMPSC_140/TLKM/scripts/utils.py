@@ -7,20 +7,20 @@ import os
 BASE_IMG_PATH = 'data/images/'
 BASE_SFX_PATH = 'data/sounds/'
 
-def load_image(path, scale=[]):
+def load_image(path, scale=[], colorkey=(0,0,0)):
     img = pygame.image.load(BASE_IMG_PATH + path).convert()
-    img.set_colorkey((0, 0, 0))
+    img.set_colorkey(colorkey)
 
     if scale:
         img = pygame.transform.scale(img, (img.get_width() * scale[0], img.get_height() * scale[1]))
 
     return img
 
-def load_images(path, scale=[]):
+def load_images(path, scale=[], colorkey=(0,0,0)):
     images = []
 
     for img_name in sorted(os.listdir(BASE_IMG_PATH + path)):
-        images.append(load_image(path + '/' + img_name, scale=scale))
+        images.append(load_image(path + '/' + img_name, scale=scale, colorkey=colorkey))
     return images
 
 def load_sound(path):
@@ -45,6 +45,11 @@ class Animation:
 
     def copy(self):
         return Animation(self.images, self.image_duration, self.loop)
+    
+    def is_last_frame(self):
+        if self.frame >= self.image_duration * len(self.images) - 2:
+            return True
+        return False
     
     def update(self):
         if self.loop:
