@@ -1,5 +1,5 @@
 import pygame
-from scripts.utils import load_image, load_images, load_sound, load_sounds, Animation
+from scripts.utils import load_image, load_images, load_sound, load_sounds, Animation, Background
 class Assets:
 
     def __init__(self):
@@ -35,7 +35,8 @@ class Assets:
                      },
                      'backgrounds' : {
                         'background' : {
-                                        'all' : load_images('background')
+                                        'all' : [Background(load_image('background/0.png'), depth=0.2),
+                                                 Background(load_image('background/1.png'), depth=0.1)]
                         }
                      }
            },

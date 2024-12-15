@@ -93,9 +93,8 @@ class Engine:
             pygame.draw.rect(self.display, (255, 255, 255), (0 - render_scroll[0], 0 - render_scroll[1], 20, 20))
 
             pos = [0, 0]
-            for background in self.background:
-                self.display.blit(background, (pos[0], pos[1] - render_scroll[1]))
-                pos = [0, -200]
+            for i, background in enumerate(self.background):
+                background.render(self.display, (0, 0 - (self.background[i - 1].img.get_height() if i > 0 else 0)), render_scroll)
             #self.display.blit(self.a) 
 
             

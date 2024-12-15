@@ -34,6 +34,15 @@ def load_sounds(path):
         sounds.append(load_sound(path + '/' + sound_name))
     return sounds
 
+class Background:
+
+    def __init__(self, img, depth):
+        self.img = img
+        self.depth = depth
+    
+    def render(self, surf, pos=(0, 0), offset=(0, 0)):
+        surf.blit(self.img, (pos[0] - offset[0] * self.depth, pos[1] - offset[1] * self.depth))
+
 class Animation:
 
     def __init__(self, images, dur=5, loop=True):
