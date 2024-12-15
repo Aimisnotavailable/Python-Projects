@@ -77,6 +77,7 @@ class PhysicsEntities:
         entity_rect = self.rect()
         
         tile_data = tilemap.tiles_rect_around(self.rect())
+        
         for i in range(len(tile_data['rects'])):
             rect = tile_data['rects'][i]
             color = tile_data['color'][i]

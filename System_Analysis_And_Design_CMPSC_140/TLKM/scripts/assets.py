@@ -21,10 +21,13 @@ class Assets:
                                     'run' : {
                                        'all' : Animation(load_images('entities/player/run', colorkey=(255, 0, 0)), dur=2),
                                     },
-                                    'attack':{
+                                    'attack' : {
                                        'normal_attack' : [Animation(load_images('entities/player/attack/normal_attack/combo1', colorkey=(255, 0, 0)), dur=2, loop=False), 
                                                           Animation(load_images('entities/player/attack/normal_attack/combo2', colorkey=(255, 0, 0)), dur=2, loop=False),
                                                           Animation(load_images('entities/player/attack/normal_attack/combo3', colorkey=(255, 0, 0)), dur=2, loop=False)]
+                                    },
+                                    'jump' : {
+                                       'all' : Animation(load_images('entities/player/jump', colorkey=(255, 0, 0)), dur=2, loop=False),
                                     }
                                  },
                         'enemy' : {

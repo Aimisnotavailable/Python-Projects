@@ -15,6 +15,7 @@ class Player(NonobjEntities):
     def update(self, tilemap, surf, movement=(0,0), offset=(0,0)):
         super().update(tilemap, surf, movement, offset)
         
+        
         if self.action == 'attack' and self.animation.done:
             self.attacking = False
             self.combo = 0
