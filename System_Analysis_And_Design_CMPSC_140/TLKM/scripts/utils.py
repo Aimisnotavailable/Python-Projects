@@ -59,7 +59,9 @@ class Animation:
         if self.frame >= self.image_duration * len(self.images) - 2:
             return True
         return False
-    
+    def set_frame_to_last(self):
+        self.frame = self.image_duration * len(self.images) -1 
+         
     def update(self):
         if self.loop:
             self.frame = (self.frame + 1) % (self.image_duration * len(self.images))

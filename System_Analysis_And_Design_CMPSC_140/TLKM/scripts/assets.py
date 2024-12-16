@@ -33,6 +33,9 @@ class Assets:
                         'enemy' : {
                                     'idle' : {
                                        'all' : Animation(load_images('entities/enemy/idle', scale=[1.4, 1.4], colorkey=(255, 0, 0)), dur=2),
+                                    },
+                                    'run' : {
+                                       'all' : Animation(load_images('entities/enemy/run', scale=[1.4, 1.4], colorkey=(255, 0, 0)), dur=1),
                                     }
                         }
                      },

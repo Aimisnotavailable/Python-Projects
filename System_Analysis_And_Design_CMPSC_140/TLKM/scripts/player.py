@@ -15,13 +15,18 @@ class Player(NonobjEntities):
     def update(self, tilemap, surf, movement=(0,0), offset=(0,0)):
         super().update(tilemap, surf, movement, offset)
         
-        
         if self.action == 'attack' and self.animation.done:
             self.attacking = False
             self.combo = 0
 
         if not self.attacking:
-            if self.velocity[0] == 0:
+            if self.air_time > 4:
+                if self.jump:
+                    self.set_action('jump')
+                else:
+                    self.set_action('jump')
+                    self.animation.set_frame_to_last()
+            elif self.velocity[0] == 0:
                 self.set_action('idle')
             elif self.running:
                 self.set_action('run')

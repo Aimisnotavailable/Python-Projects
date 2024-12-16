@@ -17,8 +17,8 @@ class Engine:
     
     def __init__(self) -> None:
         
-        self.screen = pygame.display.set_mode((600, 400))
-        self.display = pygame.Surface((300, 200))
+        self.screen = pygame.display.set_mode((1200, 800))
+        self.display = pygame.Surface((600, 400))
         self.clock = pygame.time.Clock()
         pygame.mixer.init()
 
@@ -88,7 +88,7 @@ class Engine:
             mpos = list(pygame.mouse.get_pos())
             mpos = [mpos[0] // 2, mpos[1] // 2]
 
-            render_scroll = self.follow.scroll(self.display, self.player.rect().center, offset=(50, 0))
+            render_scroll = self.follow.scroll(self.display, self.player.rect().center, offset=(0, 0))
 
             pygame.draw.rect(self.display, (255, 255, 255), (0 - render_scroll[0], 0 - render_scroll[1], 20, 20))
 
@@ -113,6 +113,7 @@ class Engine:
                     if event.key == pygame.K_DOWN:
                         pass
                     if event.key == pygame.K_UP:
+                        self.player.jump = True
                         self.player.velocity[1] = -5
 
                 if event.type == pygame.KEYUP:

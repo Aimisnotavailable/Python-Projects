@@ -19,6 +19,7 @@ class PhysicsEntities:
         self.last_action = ''
         self.anim_offset = [0, 0]
         self.flip = False
+        self.jump = False
         self.air_time = 0
 
         self.last_movement = [0, 0]
@@ -82,7 +83,9 @@ class PhysicsEntities:
             rect = tile_data['rects'][i]
             color = tile_data['color'][i]
 
-            #pygame.draw.rect(surf, (255,255,255), (self.pos[0] - offset[0], self.pos[1] - offset[1], self.size[0], self.size[1]))
+            # pygame.draw.rect(surf, (255,255,255), (self.pos[0] - offset[0], self.pos[1] - offset[1], self.size[0], self.size[1]))
+
+            # pygame.draw.rect(surf, (255, 255, 255), (rect[0] - offset[0], rect[1] - offset[1], rect[2], rect[3]))
             if entity_rect.colliderect(rect):
                 if int(self.drag):
                     spawn_particles = random.random() + int(abs(self.velocity[1]))
@@ -129,12 +132,20 @@ class PhysicsEntities:
         
         self.velocity[1] = min(5 * self.drag, self.velocity[1] + 0.1)
 
+        if self.collisions['down']:
+            self.jump = False
+            self.air_time = 0
+        else:
+            self.air_time += 1
+
         if self.collisions['up'] or self.collisions['down']:
             self.velocity[1] = 0
 
         if self.running > 0:
+            self.flip = False
             self.velocity[0] = min(5, self.velocity[0] + 1)
         elif self.running < 0:
+            self.flip = True
             self.velocity[0] = max(-5, self.velocity[0] - 1)
 
         if self.velocity[0] > 0:
