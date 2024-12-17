@@ -41,7 +41,7 @@ class Background:
         self.depth = depth
     
     def render(self, surf, pos=(0, 0), offset=(0, 0)):
-        surf.blit(self.img, (pos[0] - offset[0] * self.depth, pos[1] - offset[1] * self.depth))
+        surf.blit(pygame.transform.scale(self.img, surf.get_size()), (pos[0] - offset[0] * self.depth, pos[1] - offset[1] * self.depth))
 
 class Animation:
 

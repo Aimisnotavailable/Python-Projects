@@ -23,8 +23,6 @@ class Game:
 
         self.assets = Assets().fetch(payload={'img' : ['tiles', 'spawners']})
         
-        print(self.assets)
-        
         self.water = Water()
         self.tilemap = TileMap(self)
         self.tilemap.load("data/maps/map.json")
@@ -51,6 +49,7 @@ class Game:
         running = True
 
         while running:
+            
             self.display.fill((255, 255, 255))
             self.render_scroll[0] += self.movement[0] * RENDER_SCALE
             self.render_scroll[1] += self.movement[1] * RENDER_SCALE
@@ -66,7 +65,7 @@ class Game:
             # for x in range(self.render_scroll[0] // self.tilemap.tile_size, (self.render_scroll[0] + self.display.get_width()) // self.tilemap.tile_size + 1):
             #     for y in range(self.render_scroll[1] // self.tilemap.tile_size, (self.render_scroll[1] + self.display.get_height()) // self.tilemap.tile_size + 1):
             #         pygame.draw.rect(self.display, (255, 255, 255), (x * self.tilemap.tile_size - self.render_scroll[0], y * self.tilemap.tile_size - self.render_scroll[1], self.tilemap.tile_size , self.tilemap.tile_size), 1)
-                    
+                   
             key = str(tile_pos[0]) + ";" + str(tile_pos[1])
             
             if self.clicking:

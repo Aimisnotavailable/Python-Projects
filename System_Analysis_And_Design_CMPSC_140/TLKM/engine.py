@@ -33,8 +33,8 @@ class Engine:
 
         t_pos = self.tilemap.extract([('spawner', 0)], keep=False)[0]['pos']
         
-        self.enemy = Enemy(self, pos=t_pos, size=(110, 54))
-        self.player = Player(self, pos=pos, size=(64, 89))
+        self.enemy = Enemy(self, max_speed=4, pos=t_pos, size=(110, 54))
+        self.player = Player(self, max_speed=6, pos=pos, size=(64, 89))
         self.follow = Follow('follow', 20)
         self.pos = [0, 0]
 
@@ -80,26 +80,14 @@ class Engine:
 
         self.combo = False
         self.font = pygame.font.Font(size=20)
+        self.start = False
     
     def run(self) -> None:
         movement = [0, 0]
         while True:
-            self.display.fill((0, 0, 0))  
-            mpos = list(pygame.mouse.get_pos())
-            mpos = [mpos[0] // 2, mpos[1] // 2]
 
-            render_scroll = self.follow.scroll(self.display, self.player.rect().center, offset=(0, 0))
-
-            pygame.draw.rect(self.display, (255, 255, 255), (0 - render_scroll[0], 0 - render_scroll[1], 20, 20))
-
-            pos = [0, 0]
-            for i, background in enumerate(self.background):
-                background.render(self.display, (0, 0 - (self.background[i - 1].img.get_height() if i > 0 else 0)), render_scroll)
-            #self.display.blit(self.a) 
-
-            
             for event in pygame.event.get():
-                
+                    
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
@@ -115,6 +103,8 @@ class Engine:
                     if event.key == pygame.K_UP:
                         self.player.jump = True
                         self.player.velocity[1] = -5
+                    if event.key == pygame.K_RETURN:
+                        self.start = True
 
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_LEFT:
@@ -132,18 +122,48 @@ class Engine:
                             self.player.combo += 1
                             self.combo = True
 
-            if self.combo and self.player.animation.is_last_frame():
-                self.player.set_action('attack')
-                self.player.attack('normal_attack', self.player.combo)
-                self.combo = False
+            if self.start:
+                self.display.fill((0, 0, 0))  
+                mpos = list(pygame.mouse.get_pos())
+                mpos = [mpos[0] // 2, mpos[1] // 2]
 
-            self.tilemap.render(self.display, offset=render_scroll)
-            self.player.update(self.tilemap, self.display, movement=movement, offset=render_scroll)
-            self.player.render(self.display, render_scroll)
+                render_scroll = self.follow.scroll(self.display, self.player.rect().center, offset=(0, 0))
+
+                pygame.draw.rect(self.display, (255, 255, 255), (0 - render_scroll[0], 0 - render_scroll[1], 20, 20))
+
+                pos = [0, 0]
+                for i, background in enumerate(self.background):
+                    background.render(self.display, (0, 0 - (self.background[i - 1].img.get_height() if i > 0 else 0)))
+                #self.display.blit(self.a) 
+
+                if self.enemy.rect().colliderect(self.player.rect()):
+                    if self.player.attacking and self.player.animation.is_last_frame() and not self.player.attacked:
+                        self.enemy.hits += 1
+                        self.enemy.attacked = 60 // self.enemy.hits
+                        print(self.enemy.attacked)
+                        self.enemy.attacking = False
+                    elif self.enemy.attacking and not self.enemy.attacked:
+                        
+                        self.player.attacked = 60
+                        self.player.velocity = [-10 if self.enemy.flip else 10, -5]
             
-            self.enemy.update(self.tilemap, self.display, offset=render_scroll)
-            self.enemy.render(self.display, render_scroll)
+                # print(self.enemy.velocity)
+                if self.combo and self.player.animation.is_last_frame():
+                    self.player.set_action('attack')
+                    self.player.attack('normal_attack', self.player.combo)
+                    self.combo = False
 
+                self.tilemap.render(self.display, offset=render_scroll)
+                self.player.update(self.tilemap, self.display, movement=movement, offset=render_scroll)
+                self.player.render(self.display, render_scroll)
+                
+                self.enemy.update(self.tilemap, self.display, offset=render_scroll)
+                self.enemy.render(self.display, render_scroll)
+            else:
+                self.display.blit(pygame.transform.scale(self.background[1].img, self.display.get_size()), (0, 0))
+                self.display.blit(self.font.render('THE LOST KINGDOM', True, (0, 0, 0)), (100, 100))
+                self.display.blit(self.font.render('MULAWIN', True, (0, 0, 0)), (200, 120))
+                
         
             self.screen.blit(pygame.transform.scale(self.display, (self.screen.get_width(), self.screen.get_height())), (0, 0))
 

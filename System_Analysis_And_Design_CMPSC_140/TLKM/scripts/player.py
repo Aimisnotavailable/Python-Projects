@@ -3,11 +3,11 @@ from scripts.entities import NonobjEntities
 
 class Player(NonobjEntities):
 
-    def __init__(self, game, e_type='', pos=(0,0), size=(16,16)):
+    def __init__(self, game, e_type='', max_speed=0, pos=(0,0), size=(16,16)):
         self.attacking = False
         self.running = 0
         #self.parts = {'Head': '' , 'Torso' : '', 'Arms': '', 'Legs' : '', 'All' : ''}
-        super().__init__(game, 'player', pos=pos, size=size)
+        super().__init__(game, 'player',  max_speed, pos=pos, size=size)
         self.set_action('idle')
 
     # def render(self, surf, offset):

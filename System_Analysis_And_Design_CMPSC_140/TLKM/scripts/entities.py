@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 
 class PhysicsEntities:
     
-    def __init__(self, game, e_type, pos=(0,0), size=(16,16)):
+    def __init__(self, game, e_type, max_speed=0, pos=(0,0), size=(16,16)):
         self.game = game
         self.type = e_type
         self.pos = list(pos)
@@ -15,6 +15,7 @@ class PhysicsEntities:
         self.velocity = [0, 0]
         self.collisions = {'up' : False, 'down' : False, 'right' : False, 'left' : False}
 
+        self.max_speed = max_speed
         self.action = ''
         self.last_action = ''
         self.anim_offset = [0, 0]
@@ -31,9 +32,10 @@ class PhysicsEntities:
         self.combo = 0
 
         self.atk_type = ''
+        self.attacked = 0
 
     def mask(self):
-        return pygame.mask.from_surface(self.animation.img()).to_surface(setcolor=(255 ,255 ,255), unsetcolor=(0, 0, 0, 0))
+        return pygame.mask.from_surface(pygame.transform.flip(self.animation.img(), self.flip, False)).to_surface(setcolor=(185 ,11 ,11), unsetcolor=(0, 0, 0, 0))
     
     def sprite(self):
         return pygame.sprite.Group()
@@ -41,15 +43,15 @@ class PhysicsEntities:
     def rect(self):
         return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
     
-    def mask(self):
-        return pygame.mask.from_surface(self.animation.img())
+    # def mask(self):
+    #     return pygame.mask.from_surface(self.animation.img())
     
     def render(self, surf, offset=(0,0)):
         img = pygame.transform.flip(self.animation.img(), self.flip, False)
         self.anim_offset = [(img.get_width() - self.size[0]) * 1 if self.flip else 1, img.get_height() - self.size[1]]
         #print(self.anim_offset)
         #surf.blit(pygame.transform.flip(self.mask().to_surface(setcolor=(0, 255, 255), unsetcolor=(0, 0, 0)), self.flip, False), (self.pos[0] - offset[0] + self.anim_offset[0], self.pos[1] - offset[1] + self.anim_offset[1]))
-        surf.blit(img, (self.pos[0] - offset[0] - self.anim_offset[0], self.pos[1] - offset[1] - self.anim_offset[1]))
+        surf.blit(img if not self.attacked or (self.attacked % 2) == 0 else self.mask(), (self.pos[0] - offset[0] - self.anim_offset[0], self.pos[1] - offset[1] - self.anim_offset[1]))
 
     def update(self, tilemap, surf, movement=(0,0), offset=(0,0)):
         self.movement = movement
@@ -143,10 +145,10 @@ class PhysicsEntities:
 
         if self.running > 0:
             self.flip = False
-            self.velocity[0] = min(5, self.velocity[0] + 1)
+            self.velocity[0] = min(self.max_speed, self.velocity[0] + 1)
         elif self.running < 0:
             self.flip = True
-            self.velocity[0] = max(-5, self.velocity[0] - 1)
+            self.velocity[0] = max(-self.max_speed, self.velocity[0] - 1)
 
         if self.velocity[0] > 0:
             self.velocity[0] = max(self.velocity[0] - 0.4, 0)
@@ -155,6 +157,8 @@ class PhysicsEntities:
         self.animation.update()
 
         self.track = max(0, self.track - 1)
+
+        self.attacked = max(0, self.attacked -1)
 
 class NonobjEntities(PhysicsEntities):
     

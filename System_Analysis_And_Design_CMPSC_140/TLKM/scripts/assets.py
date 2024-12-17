@@ -36,8 +36,14 @@ class Assets:
                                     },
                                     'run' : {
                                        'all' : Animation(load_images('entities/enemy/run', scale=[1.4, 1.4], colorkey=(255, 0, 0)), dur=1),
-                                    }
-                        }
+                                    },
+                                    'attack' : {
+                                       'normal_attack' : [Animation(load_images('entities/enemy/attack/normal_attack/combo', scale=[1.4, 1.4], colorkey=(255, 0, 0)), dur=1, loop=False)]
+                                    },
+                                    'attacked' : {
+                                       'all' : Animation(load_images('entities/enemy/attacked', scale=[1.4, 1.4], colorkey=(255, 0, 0)), dur=4)
+                                    },
+                        } 
                      },
                      'backgrounds' : {
                         'background' : {
