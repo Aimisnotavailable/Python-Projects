@@ -31,9 +31,10 @@ class Engine:
         self.tilemap.load(path.MAP_PATH + 'map.json')
         pos = self.tilemap.extract([('spawner', 1)], keep=False)[0]['pos']
 
-        t_pos = self.tilemap.extract([('spawner', 0)], keep=False)[0]['pos']
-        
-        self.enemy = Enemy(self, max_speed=4, pos=t_pos, size=(110, 54))
+        e_sp = self.tilemap.extract([('spawner', 0)], keep=False)
+
+        self.enemy = Enemy(self, max_speed=4, pos=e_sp[0]['pos'], size=(110, 54))
+        self.enemy1 = Enemy(self, e_type='enemy1', max_speed=4, pos=e_sp[1]['pos'], size=(110, 69))
         self.player = Player(self, max_speed=6, pos=pos, size=(64, 89))
         self.follow = Follow('follow', 20)
         self.pos = [0, 0]
@@ -137,10 +138,9 @@ class Engine:
                 #self.display.blit(self.a) 
 
                 if self.enemy.rect().colliderect(self.player.rect()):
-                    if self.player.attacking and self.player.animation.is_last_frame() and not self.player.attacked:
+                    if self.player.attacking and not self.player.attacked:
                         self.enemy.hits += 1
                         self.enemy.attacked = 60 // self.enemy.hits
-                        print(self.enemy.attacked)
                         self.enemy.attacking = False
                     elif self.enemy.attacking and not self.enemy.attacked:
                         
@@ -156,7 +156,9 @@ class Engine:
                 self.tilemap.render(self.display, offset=render_scroll)
                 self.player.update(self.tilemap, self.display, movement=movement, offset=render_scroll)
                 self.player.render(self.display, render_scroll)
-                
+
+                self.enemy1.update(self.tilemap, self.display, offset=render_scroll)
+                self.enemy1.render(self.display, render_scroll)
                 self.enemy.update(self.tilemap, self.display, offset=render_scroll)
                 self.enemy.render(self.display, render_scroll)
             else:

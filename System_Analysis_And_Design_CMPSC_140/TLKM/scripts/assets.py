@@ -43,7 +43,15 @@ class Assets:
                                     'attacked' : {
                                        'all' : Animation(load_images('entities/enemy/attacked', scale=[1.4, 1.4], colorkey=(255, 0, 0)), dur=4)
                                     },
-                        } 
+                        },
+                        'enemy1' : {
+                                    'idle' : {
+                                       'all' : Animation(load_images('entities/enemy1/idle', scale=[1.4, 1.4], colorkey=(255, 0, 0)), dur=2),
+                                    },
+                                    'run' : {
+                                       'all' : Animation(load_images('entities/enemy1/run', scale=[1.4, 1.4], colorkey=(255, 0, 0)), dur=1),
+                                    },
+                        },
                      },
                      'backgrounds' : {
                         'background' : {
